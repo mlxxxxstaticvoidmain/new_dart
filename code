@@ -62,7 +62,7 @@ void main() {
       print('\nСимвол ${j + 1}: ${emojis[j]}');
       int k = 1;
       for (var rune in emojis[j].runes) {
-        print('  Кодовая точка $k: U+${rune.toRadixString(16).toUpperCase()}');
+        print('Кодовая точка $k: U+${rune.toRadixString(16).toUpperCase()}');
         k++;
       }
     }

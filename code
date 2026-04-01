@@ -1,0 +1,86 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:math';
+
+enum Mood {
+  joy('\u{1F600}', 'радостное', 10),
+  excitement('\u{1F60E}', 'крутое', 9),
+  calm('\u{1F9D8}', 'спокойное', 5),
+  energetic('\u{26A1}', 'энергичное', 8),
+  sadness('\u{1F622}', 'грустное', 3);
+
+  final String emoji;
+  final String description;
+  final int energy;
+
+  const Mood(this.emoji, this.description, this.energy);
+}
+
+void main() {
+  print("Введите ваше имя: ");
+  String name = stdin.readLineSync(encoding: utf8)!;
+
+  print("Генерируем случайное настроение...");
+  sleep(Duration(seconds: 2));
+  print("Генерируем случайное настроение...");
+  sleep(Duration(seconds: 2));
+  print("Генерируем случайное настроение...");
+  sleep(Duration(seconds: 1));
+
+  var moods = Mood.values;
+  var random = Random();
+  var mood = moods[random.nextInt(moods.length)];
+
+  print(
+    '\nПривет, $name! Твое настроение: ${mood.emoji} ${mood.description} (энергия: ${mood.energy}/10)',
+  );
+
+  int codePoint = mood.emoji.runes.first;
+  print("Кодовая точка: U+${codePoint.toRadixString(16).toUpperCase()}");
+
+  print("\nХотите проанализировать сложное эмодзи? (да/нет)");
+  String decision = stdin.readLineSync(encoding: utf8)!;
+
+  if (decision.toLowerCase().trim() == "да") {
+    print("Введите строку с эмодзи:");
+    String input = stdin.readLineSync(encoding: utf8)!;
+
+    List<String> emojis = splitIntoEmojis(input);
+    int symbolsCount = emojis.length;
+
+    print('\nКоличество 16-битных единиц: ${input.codeUnits.length}');
+    print('Количество кодовых точек: ${input.runes.length}');
+    print('Количество реальных символов: $symbolsCount');
+
+    print('\nСтрока разбита на отдельные символы:');
+    for (int j = 0; j < emojis.length; j++) {
+      print('Символ ${j + 1}: ${emojis[j]}');
+    }
+
+    print('\nЮникод каждого символа:');
+    for (int j = 0; j < emojis.length; j++) {
+      print('\nСимвол ${j + 1}: ${emojis[j]}');
+      int k = 1;
+      for (var rune in emojis[j].runes) {
+        print('  Кодовая точка $k: U+${rune.toRadixString(16).toUpperCase()}');
+        k++;
+      }
+    }
+  }
+}
+
+List<String> splitIntoEmojis(String text) {
+  List<String> result = [];
+  String current = '';
+
+  for (var rune in text.runes) {
+    current += String.fromCharCode(rune);
+
+    if (rune != 0x200D) {
+      result.add(current);
+      current = '';
+    }
+  }
+
+  return result;
+}

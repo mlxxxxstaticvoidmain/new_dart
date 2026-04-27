@@ -1,0 +1,507 @@
+import 'dart:io';
+
+//ЗАДАНИеЕ 1
+abstract class Glass {
+  int Drink(int volume);
+}
+
+class Person implements Glass {
+  int age;
+  String name;
+  Person(this.age, this.name);
+
+  @override
+  int Drink(int volume) {
+    print("Вы выпили из кружки, объем кружки: $volume");
+    return volume - 10;
+  }
+}
+
+//ЗАДАНИЕК 2
+abstract class Wardrobe {
+  List<String> firstShelf;
+  List<String> secondShelf;
+  List<String> thirdShelf;
+
+  Wardrobe(this.firstShelf, this.secondShelf, this.thirdShelf);
+
+  String putOnFirstShelf(String item);
+  String takeFromFirstShelf(String item);
+
+  String putOnSecondShelf(String item);
+  String takeFromSecondShelf(String item);
+
+  String putOnThirdShelf(String item);
+  String takeFromThirdShelf(String item);
+}
+
+class Polzovatel implements Wardrobe {
+  int age;
+  String name;
+
+  @override
+  List<String> firstShelf;
+
+  @override
+  List<String> secondShelf;
+
+  @override
+  List<String> thirdShelf;
+
+  Polzovatel(
+    this.age,
+    this.name,
+    this.firstShelf,
+    this.secondShelf,
+    this.thirdShelf,
+  );
+
+  @override
+  String putOnFirstShelf(String item) {
+    firstShelf.add(item);
+    return "Вы положили предмет $item на первую полку";
+  }
+
+  @override
+  String takeFromFirstShelf(String item) {
+    firstShelf.remove(item);
+    return "Вы взяли предмет $item с первой полки";
+  }
+
+  @override
+  String putOnSecondShelf(String item) {
+    secondShelf.add(item);
+    return "Вы положили предмет $item на вторую полку";
+  }
+
+  @override
+  String takeFromSecondShelf(String item) {
+    secondShelf.remove(item);
+    return "Вы взяли предмет $item со второй полки";
+  }
+
+  @override
+  String putOnThirdShelf(String item) {
+    thirdShelf.add(item);
+    return "Вы положили предмет $item на третью полку";
+  }
+
+  @override
+  String takeFromThirdShelf(String item) {
+    thirdShelf.remove(item);
+    return "Вы взяли предмет $item с третьей полки";
+  }
+}
+
+//ЗАДАНИЕ 3
+
+abstract class Grif {
+  int leftSide;
+  int rightSide;
+  int maxWeight;
+
+  Grif(this.leftSide, this.rightSide, this.maxWeight);
+
+  String putOnLeftSide(int weight);
+  String putOnRightSide(int weight);
+}
+
+class Blin extends Grif {
+  int weight;
+  String color;
+  Blin(this.weight, this.color) : super(0, 0, 120);
+
+  @override
+  String putOnLeftSide(int weight) {
+    leftSide += weight;
+    if (leftSide + rightSide >= maxWeight) {
+      print("Вы не можете навесить в сумме больше $maxWeight kg");
+      leftSide -= weight;
+    }
+    return "Вы повесили на левую сторону $weight кг";
+  }
+
+  @override
+  String putOnRightSide(int weight) {
+    rightSide += weight;
+    if (rightSide + leftSide >= maxWeight) {
+      print("Вы не можете навесить в сумме больше $maxWeight kg");
+      rightSide -= weight;
+    }
+    return "Вы повесили на правую сторону $weight кг";
+  }
+}
+
+//ЗАДАНИЕ 4
+class Converter {
+  double value;
+  double result;
+
+  Converter(this.value, this.result);
+
+  String convert() {
+    print(
+      "Введите название валюты, из которой будем переводить: rub, eur, usd",
+    );
+    String? currency = stdin.readLineSync();
+
+    switch (currency) {
+      case "rub":
+        print("Сколько денег?");
+        String? input = stdin.readLineSync();
+        value = double.parse(input!);
+        double rubUsd = value / 75;
+        double rubEuro = value / 88;
+        result = rubUsd;
+        return "В долларах - $rubUsd, В евро - $rubEuro";
+
+      case "eur":
+        print("Сколько денег?");
+        String? input = stdin.readLineSync();
+        value = double.parse(input!);
+        double eurRub = value * 88;
+        double eurUsd = value * 1.17;
+        result = eurUsd;
+        return "В рублях - $eurRub, в долларах - $eurUsd";
+
+      case "usd":
+        print("Сколько денег?");
+        String? input = stdin.readLineSync();
+        value = double.parse(input!);
+        double usdRub = value * 75;
+        double usdEur = value / 1.17;
+        result = usdRub;
+        return "В рублях - $usdRub, в Евро - $usdEur";
+
+      default:
+        print("Вы ввели: '$currency'");
+        return "Ошибка: неверная валюта. Доступны: rub, eur, usd";
+    }
+  }
+}
+
+//ЗАДАНИЕ 6
+class Number {
+  double value;
+  Number(this.value);
+
+  Number plus(Number other) {
+    return Number(value + other.value);
+  }
+
+  Number minus(Number other) {
+    return Number(value - other.value);
+  }
+
+  Number times(Number other) {
+    return Number(value * other.value);
+  }
+
+  Number dividedBy(Number other) {
+    return Number(value / other.value);
+  }
+
+  bool equals(Number other) {
+    return value == other.value;
+  }
+
+  void show() {
+    print(value);
+  }
+}
+
+//ЗАДАНИЕ 7
+
+enum CarState { stop, drive, turn }
+
+class Car {
+  CarState state;
+
+  Car(this.state);
+
+  void stop() {
+    state = CarState.stop;
+  }
+
+  void drive() {
+    state = CarState.drive;
+  }
+
+  void turn() {
+    state = CarState.turn;
+  }
+
+  String getState() {
+    if (state == CarState.stop) {
+      return "Стоп";
+    } else if (state == CarState.drive) {
+      return "Едет";
+    } else {
+      return "Поворачивает";
+    }
+  }
+}
+
+//ЗАДАНИЕ 8
+abstract class Shape {
+  double getArea();
+}
+
+class Rectangle extends Shape {
+  double width, height;
+
+  Rectangle(this.width, this.height);
+
+  @override
+  double getArea() {
+    return width * height;
+  }
+}
+
+class Triangle extends Shape {
+  double base, height;
+
+  Triangle(this.base, this.height);
+
+  @override
+  double getArea() {
+    return 0.5 * base * height;
+  }
+}
+
+class Circle extends Shape {
+  double radius;
+
+  Circle(this.radius);
+
+  @override
+  double getArea() {
+    return 3.14 * radius * radius;
+  }
+}
+
+//ЗАДАНИЕ 9
+class NumberConverter {
+  String decimalToHex(int num) {
+    return num.toRadixString(16).toUpperCase();
+  }
+
+  String decimalToOct(int num) {
+    return num.toRadixString(8);
+  }
+
+  int hexToDecimal(String hex) {
+    return int.parse(hex, radix: 16);
+  }
+
+  int octToDecimal(String oct) {
+    return int.parse(oct, radix: 8);
+  }
+}
+
+//ЗАДАНИЕ 10
+abstract class Shape_2 {
+  double getArea();
+}
+
+class Rectangle_2 extends Shape_2 {
+  double width, height;
+
+  Rectangle_2(this.width, this.height);
+
+  @override
+  double getArea() {
+    return width * height;
+  }
+}
+
+class Circle_2 extends Shape_2 {
+  double radius;
+
+  Circle_2(this.radius);
+
+  @override
+  double getArea() {
+    return 3.14 * radius * radius;
+  }
+}
+
+class ShapeList {
+  List<Shape_2> shapes = [];
+
+  void add(Shape_2 s) {
+    shapes.add(s);
+  }
+
+  Shape_2 getMaxArea() {
+    Shape_2 max = shapes[0];
+    for (int i = 1; i < shapes.length; i++) {
+      if (shapes[i].getArea() > max.getArea()) {
+        max = shapes[i];
+      }
+    }
+    return max;
+  }
+
+  double getMaxAreaValue() {
+    return getMaxArea().getArea();
+  }
+}
+
+//ЗАДАНИЕ 11
+abstract class Tableware {
+  String getName();
+}
+
+class Fork extends Tableware {
+  @override
+  String getName() {
+    return "Вилка";
+  }
+}
+
+class Spoon extends Tableware {
+  @override
+  String getName() {
+    return "Ложка";
+  }
+}
+
+class Knife extends Tableware {
+  @override
+  String getName() {
+    return "Нож";
+  }
+}
+
+class Table {
+  List<Tableware> items = [];
+
+  void put(Tableware item) {
+    items.add(item);
+    print("${item.getName()} поставлен на стол");
+  }
+
+  void remove(Tableware item) {
+    items.remove(item);
+    print("${item.getName()} убран со стола");
+  }
+
+  void showItems() {
+    print("На столе:");
+    for (var item in items) {
+      print("- ${item.getName()}");
+    }
+  }
+}
+
+void main() {
+  //ЗАДАНИЕ 1
+  print("задание 1");
+
+  Person person = Person(25, "Максим");
+  int left = person.Drink(100);
+  print("Осталось в кружке: $left");
+
+  //ЗАДАНИЕ 2
+  print("задание 2");
+
+  var polzovatel = Polzovatel(25, "Максим", [], [], []);
+
+  print(polzovatel.putOnFirstShelf("Книга"));
+  print(polzovatel.putOnSecondShelf("Телефон"));
+  print(polzovatel.takeFromFirstShelf("Книга"));
+  print(polzovatel.putOnThirdShelf("Ноутбук"));
+
+  print("Первая полка: ${polzovatel.firstShelf}");
+  print("Вторая полка: ${polzovatel.secondShelf}");
+  print("Третья полка: ${polzovatel.thirdShelf}");
+
+  //зАДАНИЕ 3
+  print("задание 3");
+
+  var blin = Blin(10, "красный");
+
+  print(blin.putOnLeftSide(50));
+  print(blin.putOnRightSide(60));
+  print(blin.putOnLeftSide(15));
+
+  print("На левой стороне: ${blin.leftSide} кг");
+  print("На правой стороне: ${blin.rightSide} кг");
+
+  //ЗАДАНИЕ 4
+  print("задание 4");
+
+  Converter converter = Converter(0, 0);
+  String output = converter.convert();
+  print(output);
+
+  //ЗАДАНИЕ 6
+  print("задание 5");
+
+  var a = Number(10);
+  var b = Number(3);
+
+  a.plus(b).show();
+  a.minus(b).show();
+  a.times(b).show();
+  a.dividedBy(b).show();
+  print(a.equals(b));
+
+  //ЗАДАНИЕ 7
+  print("задание 7");
+
+  Car car = Car(CarState.stop);
+  print(car.getState());
+  car.drive();
+  print(car.getState());
+
+  //ЗАДАНИЕ 8
+  print("задание 8");
+
+  Shape rect = Rectangle(5, 3);
+  Shape tri = Triangle(4, 6);
+  Shape circ = Circle(2);
+
+  print(rect.getArea());
+  print(tri.getArea());
+  print(circ.getArea());
+
+  //задание 9
+  print("Задание 9");
+
+  NumberConverter conv = NumberConverter();
+
+  print(conv.decimalToHex(255));
+  print(conv.decimalToOct(64));
+  print(conv.hexToDecimal("FF"));
+  print(conv.octToDecimal("100"));
+
+  //задание 10
+  print("задание 10");
+
+  ShapeList list = ShapeList();
+  list.add(Rectangle_2(5, 3));
+  list.add(Circle_2(3));
+  list.add(Rectangle_2(2, 2));
+  print("Максимальная площадь: ${list.getMaxAreaValue()}");
+
+  //задание 11
+  print("задание 11 (наконец-то)");
+  Table table = Table();
+
+  Fork fork = Fork();
+  Spoon spoon = Spoon();
+  Knife knife = Knife();
+
+  table.put(fork);
+  table.put(spoon);
+  table.put(knife);
+
+  table.showItems();
+
+  table.remove(spoon);
+  table.showItems();
+
+  print("Всё, всем пока");
+}
